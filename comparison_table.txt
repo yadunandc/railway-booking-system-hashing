@@ -1,0 +1,24 @@
+COMPARISON TABLE
+
+| Parameter | Linear Probing | Quadratic Probing | Double Hashing |
+|-----------|----------------|-------------------|----------------|
+| Collision method | Sequential next slot | Square offset | Second hash step |
+| Average insertion | O(1) | O(1) | O(1) |
+| Worst insertion | O(n) | O(n) | O(n) |
+| Average search | O(1) | O(1) | O(1) |
+| Worst search | O(n) | O(n) | O(n) |
+| Space | O(m) | O(m) | O(m) |
+| Main issue | Primary clustering | Secondary clustering | More computation |
+| Given input probes | 1 | 1 | 1 |
+
+Performance for the given data:
+All three techniques give the same observed performance because there
+are no collisions.
+
+General comparison:
+Linear probing is simple and easy to implement but can suffer from
+primary clustering.
+Quadratic probing reduces primary clustering but can still have
+secondary clustering.
+Double hashing generally gives better probe distribution when collisions
+are present, at the cost of calculating a second hash function.

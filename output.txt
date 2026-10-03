@@ -1,0 +1,88 @@
+RAILWAY BOOKING SYSTEM USING HASHING
+Hash Table Size = 11
+Number of Booking IDs = 7
+Load Factor = 0.636 (63.6%)
+
+=== LINEAR PROBING ===
+Insertion Trace:
+23: hash=1, final_index=1, probes=1
+43: hash=10, final_index=10, probes=1
+13: hash=2, final_index=2, probes=1
+33: hash=0, final_index=0, probes=1
+53: hash=9, final_index=9, probes=1
+63: hash=8, final_index=8, probes=1
+73: hash=7, final_index=7, probes=1
+
+Final Hash Table:
+[0] -> 33
+[1] -> 23
+[2] -> 13
+[3] -> EMPTY
+[4] -> EMPTY
+[5] -> EMPTY
+[6] -> EMPTY
+[7] -> 73
+[8] -> 63
+[9] -> 53
+[10] -> 43
+
+Search Results:
+23 -> Found, probes=1
+73 -> Found, probes=1
+93 -> Not Found, probes=1
+
+=== QUADRATIC PROBING ===
+Insertion Trace:
+23: hash=1, final_index=1, probes=1
+43: hash=10, final_index=10, probes=1
+13: hash=2, final_index=2, probes=1
+33: hash=0, final_index=0, probes=1
+53: hash=9, final_index=9, probes=1
+63: hash=8, final_index=8, probes=1
+73: hash=7, final_index=7, probes=1
+
+Final Hash Table:
+[0] -> 33
+[1] -> 23
+[2] -> 13
+[3] -> EMPTY
+[4] -> EMPTY
+[5] -> EMPTY
+[6] -> EMPTY
+[7] -> 73
+[8] -> 63
+[9] -> 53
+[10] -> 43
+
+Search Results:
+23 -> Found, probes=1
+73 -> Found, probes=1
+93 -> Not Found, probes=1
+
+=== DOUBLE HASHING ===
+Insertion Trace:
+23: h1=1, h2=5, final_index=1, probes=1
+43: h1=10, h2=6, final_index=10, probes=1
+13: h1=2, h2=1, final_index=2, probes=1
+33: h1=0, h2=2, final_index=0, probes=1
+53: h1=9, h2=3, final_index=9, probes=1
+63: h1=8, h2=7, final_index=8, probes=1
+73: h1=7, h2=4, final_index=7, probes=1
+
+Final Hash Table:
+[0] -> 33
+[1] -> 23
+[2] -> 13
+[3] -> EMPTY
+[4] -> EMPTY
+[5] -> EMPTY
+[6] -> EMPTY
+[7] -> 73
+[8] -> 63
+[9] -> 53
+[10] -> 43
+
+Search Results:
+23 -> Found, probes=1
+73 -> Found, probes=1
+93 -> Not Found, probes=1

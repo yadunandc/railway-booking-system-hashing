@@ -1,166 +1,202 @@
 #include <stdio.h>
 
-#define SIZE 10
+#define SIZE 11
+#define EMPTY -1
 
-int linear[SIZE], quadratic[SIZE], doubleHash[SIZE];
-
-int hashFunction(int key)
-{
+int hash1(int key) {
     return key % SIZE;
 }
 
-void initialize()
-{
-    int i;
-    for (i = 0; i < SIZE; i++)
-    {
-        linear[i] = -1;
-        quadratic[i] = -1;
-        doubleHash[i] = -1;
-    }
+int hash2(int key) {
+    return 7 - (key % 7);
 }
 
-void insertLinear(int key)
-{
-    int index = hashFunction(key);
-    int i;
-
-    for (i = 0; i < SIZE; i++)
-    {
-        index = (hashFunction(key) + i) % SIZE;
-
-        if (linear[index] == -1)
-        {
-            linear[index] = key;
-            return;
-        }
-    }
+void initialize(int table[]) {
+    for (int i = 0; i < SIZE; i++)
+        table[i] = EMPTY;
 }
 
-void insertQuadratic(int key)
-{
-    int index, i;
-
-    for (i = 0; i < SIZE; i++)
-    {
-        index = (hashFunction(key) + i * i) % SIZE;
-
-        if (quadratic[index] == -1)
-        {
-            quadratic[index] = key;
-            return;
-        }
-    }
-
-    printf("Booking ID %d could not be inserted "
-           "using Quadratic Probing.\n", key);
-}
-
-void insertDoubleHash(int key)
-{
-    int index;
-    int step = 1 + (key % 7);
-    int i;
-
-    for (i = 0; i < SIZE; i++)
-    {
-        index = (hashFunction(key) + i * step) % SIZE;
-
-        if (doubleHash[index] == -1)
-        {
-            doubleHash[index] = key;
-            return;
-        }
-    }
-}
-
-void display(int table[], char name[])
-{
-    int i;
-
-    printf("\n%s\n", name);
-    printf("Index\tBooking ID\n");
-
-    for (i = 0; i < SIZE; i++)
-    {
-        printf("%d\t", i);
-
-        if (table[i] == -1)
-            printf("Empty\n");
+void displayTable(int table[]) {
+    for (int i = 0; i < SIZE; i++) {
+        if (table[i] == EMPTY)
+            printf("[%d] -> EMPTY\n", i);
         else
-            printf("%d\n", table[i]);
+            printf("[%d] -> %d\n", i, table[i]);
     }
 }
 
-void search(int table[], int key, int method)
-{
-    int index, step, i, probes = 0;
+void linearProbing(int keys[], int n) {
+    int table[SIZE];
+    initialize(table);
 
-    step = 1 + (key % 7);
+    printf("\n=== LINEAR PROBING ===\n");
+    printf("Insertion Trace:\n");
 
-    for (i = 0; i < SIZE; i++)
-    {
-        if (method == 1)
-            index = (hashFunction(key) + i) % SIZE;
-        else if (method == 2)
-            index = (hashFunction(key) + i * i) % SIZE;
-        else
-            index = (hashFunction(key) + i * step) % SIZE;
+    for (int i = 0; i < n; i++) {
+        int key = keys[i];
+        int index = hash1(key);
+        int probes = 1;
 
-        probes++;
+        while (table[index] != EMPTY) {
+            index = (index + 1) % SIZE;
+            probes++;
+        }
+
+        table[index] = key;
+        printf("%d: hash=%d, final_index=%d, probes=%d\n",
+               key, hash1(key), index, probes);
+    }
+
+    printf("\nFinal Hash Table:\n");
+    displayTable(table);
+
+    int searchKeys[] = {23, 73, 93};
+    printf("\nSearch Results:\n");
+
+    for (int s = 0; s < 3; s++) {
+        int key = searchKeys[s];
+        int index = hash1(key);
+        int probes = 1;
+
+        while (table[index] != EMPTY && table[index] != key) {
+            index = (index + 1) % SIZE;
+            probes++;
+        }
 
         if (table[index] == key)
-        {
-            printf("Booking ID %d: Found, Probes = %d\n",
-                   key, probes);
-            return;
-        }
-
-        if (table[index] == -1)
-        {
-            printf("Booking ID %d: Not found, Probes = %d\n",
-                   key, probes);
-            return;
-        }
+            printf("%d -> Found, probes=%d\n", key, probes);
+        else
+            printf("%d -> Not Found, probes=%d\n", key, probes);
     }
-
-    printf("Booking ID %d: Not found, Probes = %d\n",
-           key, probes);
 }
 
-int main()
-{
-    int ids[] = {23, 43, 13, 33, 53, 63, 73};
-    int n = 7, i;
-    int keys[] = {33, 73, 99};
+void quadraticProbing(int keys[], int n) {
+    int table[SIZE];
+    initialize(table);
 
-    initialize();
+    printf("\n=== QUADRATIC PROBING ===\n");
+    printf("Insertion Trace:\n");
 
-    for (i = 0; i < n; i++)
-    {
-        insertLinear(ids[i]);
-        insertQuadratic(ids[i]);
-        insertDoubleHash(ids[i]);
+    for (int i = 0; i < n; i++) {
+        int key = keys[i];
+        int index = hash1(key);
+        int probes = 0;
+
+        for (int j = 0; j < SIZE; j++) {
+            index = (hash1(key) + j * j) % SIZE;
+            probes++;
+
+            if (table[index] == EMPTY) {
+                table[index] = key;
+                break;
+            }
+        }
+
+        printf("%d: hash=%d, final_index=%d, probes=%d\n",
+               key, hash1(key), index, probes);
     }
 
-    display(linear, "Linear Probing");
-    display(quadratic, "Quadratic Probing");
-    display(doubleHash, "Double Hashing");
+    printf("\nFinal Hash Table:\n");
+    displayTable(table);
 
-    printf("\n--- Linear Probing Search ---\n");
-    for (i = 0; i < 3; i++)
-        search(linear, keys[i], 1);
+    int searchKeys[] = {23, 73, 93};
+    printf("\nSearch Results:\n");
 
-    printf("\n--- Quadratic Probing Search ---\n");
-    for (i = 0; i < 3; i++)
-        search(quadratic, keys[i], 2);
+    for (int s = 0; s < 3; s++) {
+        int key = searchKeys[s];
+        int probes = 0;
+        int found = 0;
 
-    printf("\n--- Double Hashing Search ---\n");
-    for (i = 0; i < 3; i++)
-        search(doubleHash, keys[i], 3);
+        for (int j = 0; j < SIZE; j++) {
+            int index = (hash1(key) + j * j) % SIZE;
+            probes++;
 
-    printf("\nLoad Factor = %d / %d = %.2f\n",
-           n, SIZE, (float)n / SIZE);
+            if (table[index] == key) {
+                found = 1;
+                break;
+            }
+
+            if (table[index] == EMPTY)
+                break;
+        }
+
+        if (found)
+            printf("%d -> Found, probes=%d\n", key, probes);
+        else
+            printf("%d -> Not Found, probes=%d\n", key, probes);
+    }
+}
+
+void doubleHashing(int keys[], int n) {
+    int table[SIZE];
+    initialize(table);
+
+    printf("\n=== DOUBLE HASHING ===\n");
+    printf("Insertion Trace:\n");
+
+    for (int i = 0; i < n; i++) {
+        int key = keys[i];
+        int index;
+        int probes = 0;
+
+        for (int j = 0; j < SIZE; j++) {
+            index = (hash1(key) + j * hash2(key)) % SIZE;
+            probes++;
+
+            if (table[index] == EMPTY) {
+                table[index] = key;
+                break;
+            }
+        }
+
+        printf("%d: h1=%d, h2=%d, final_index=%d, probes=%d\n",
+               key, hash1(key), hash2(key), index, probes);
+    }
+
+    printf("\nFinal Hash Table:\n");
+    displayTable(table);
+
+    int searchKeys[] = {23, 73, 93};
+    printf("\nSearch Results:\n");
+
+    for (int s = 0; s < 3; s++) {
+        int key = searchKeys[s];
+        int probes = 0;
+        int found = 0;
+
+        for (int j = 0; j < SIZE; j++) {
+            int index = (hash1(key) + j * hash2(key)) % SIZE;
+            probes++;
+
+            if (table[index] == key) {
+                found = 1;
+                break;
+            }
+
+            if (table[index] == EMPTY)
+                break;
+        }
+
+        if (found)
+            printf("%d -> Found, probes=%d\n", key, probes);
+        else
+            printf("%d -> Not Found, probes=%d\n", key, probes);
+    }
+}
+
+int main() {
+    int keys[] = {23, 43, 13, 33, 53, 63, 73};
+    int n = sizeof(keys) / sizeof(keys[0]);
+
+    printf("RAILWAY BOOKING SYSTEM USING HASHING\n");
+    printf("Hash Table Size = %d\n", SIZE);
+    printf("Number of Booking IDs = %d\n", n);
+    printf("Load Factor = %.3f (%.1f%%)\n", (double)n / SIZE,
+           (double)n * 100 / SIZE);
+
+    linearProbing(keys, n);
+    quadraticProbing(keys, n);
+    doubleHashing(keys, n);
 
     return 0;
 }

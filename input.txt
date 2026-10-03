@@ -1,0 +1,8 @@
+Railway Booking IDs:
+23 43 13 33 53 63 73
+
+Hash table size:
+11
+
+Search keys:
+23 73 93

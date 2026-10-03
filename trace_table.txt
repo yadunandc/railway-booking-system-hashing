@@ -1,0 +1,26 @@
+TRACE TABLE - RAILWAY BOOKING SYSTEM
+
+Hash function:
+h(k) = k % 11
+
+| Booking ID | h(k) | Linear Final Index | Linear Probes | Quadratic Final Index | Quadratic Probes | h1 | h2 | Double Hash Final Index | Double Hash Probes |
+|------------|------|--------------------|---------------|-----------------------|------------------|----|----|-------------------------|--------------------|
+| 23 | 1  | 1  | 1 | 1  | 1 | 1  | 5 | 1  | 1 |
+| 43 | 10 | 10 | 1 | 10 | 1 | 10 | 6 | 10 | 1 |
+| 13 | 2  | 2  | 1 | 2  | 1 | 2  | 1 | 2  | 1 |
+| 33 | 0  | 0  | 1 | 0  | 1 | 0  | 2 | 0  | 1 |
+| 53 | 9  | 9  | 1 | 9  | 1 | 9  | 3 | 9  | 1 |
+| 63 | 8  | 8  | 1 | 8  | 1 | 8  | 7 | 8  | 1 |
+| 73 | 7  | 7  | 1 | 7  | 1 | 7  | 4 | 7  | 1 |
+
+SEARCH TRACE
+
+| Search Key | Result | Linear Probes | Quadratic Probes | Double Hash Probes |
+|------------|--------|---------------|------------------|--------------------|
+| 23 | Found | 1 | 1 | 1 |
+| 73 | Found | 1 | 1 | 1 |
+| 93 | Not Found | 1 | 1 | 1 |
+
+Observation:
+All seven booking IDs occupy different initial hash positions for table size 11.
+Therefore, no collision occurs for this particular input.

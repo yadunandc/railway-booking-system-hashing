@@ -1,0 +1,51 @@
+COMPLEXITY ANALYSIS
+
+Hash Table Size = 11
+Number of booking IDs = 7
+
+Load Factor:
+alpha = n / m
+      = 7 / 11
+      = 0.636
+      = 63.6%
+
+1. LINEAR PROBING
+Insertion:
+Average: O(1)
+Worst case: O(n)
+
+Search:
+Average: O(1)
+Worst case: O(n)
+
+Space: O(m)
+
+2. QUADRATIC PROBING
+Insertion:
+Average: O(1)
+Worst case: O(n)
+
+Search:
+Average: O(1)
+Worst case: O(n)
+
+Space: O(m)
+
+3. DOUBLE HASHING
+Insertion:
+Average: O(1)
+Worst case: O(n)
+
+Search:
+Average: O(1)
+Worst case: O(n)
+
+Space: O(m)
+
+Effect of Load Factor:
+As the load factor increases, the number of occupied positions increases.
+This increases the probability of collisions and increases the number of probes.
+
+For the given input, alpha = 0.636. However, the selected booking IDs
+have different initial hash values, so the observed number of probes is 1
+for every insertion and search.
